@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 import {Injectable} from '@angular/core';
 import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest} from '@angular/common/http';
 
@@ -6,7 +6,7 @@ import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest} from '@angular/com
 export class AuthenticationInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const newReq = req.clone({
-      url: req.url.concat('&appid=79aec9dbe46af882c1e42b63bf9c1d47')
+      url: req.url.concat('&appid=a46177408fc7fee00cf7abe9b1093cea')
     });
     return next.handle(newReq);
   }

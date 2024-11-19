@@ -1,21 +1,40 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable, EMPTY} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
+import {WeatherResponse} from '../interface/forecast';
+import {DailyForecast} from '../interface/daily-forecast';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WeatherService {
-  private apiKey = '79aec9dbe46af882c1e42b63bf9c1d47';
-  private apiUrl = 'https://api.openweathermap.org/data/2.5';
+  private baseWeatherURL = 'https://api.openweathermap.org/data/2.5/';
+  private urlSuffix = "&units=metric";
 
-  constructor(private http: HttpClient) {}
-
-  getWeatherByCity(city: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/weather?q=${city}&appid=${this.apiKey}&units=metric`);
+  constructor(private http: HttpClient) {
   }
 
-  fiveDayForecast(city: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/forecast?q=${city}&appid=${this.apiKey}&units=metric`);
+  getWeatherCurrently(city: string): Observable<WeatherResponse> {
+    const url = `${this.baseWeatherURL}weather?q=${city}${this.urlSuffix}`;
+    return this.http.get<WeatherResponse>(url)
+      .pipe(catchError(err => {
+        if (err.status === 404) {
+          console.log(`Город ${city} не найден`);
+          return EMPTY;
+        }
+        throw err;
+      }));
+  }
+
+  get5DayForecast(lat: number, lon: number): Observable<DailyForecast[]> {
+    const url = `${this.baseWeatherURL}forecast?lat=${lat}&lon=${lon}${this.urlSuffix}`;
+    return this.http.get<{ list: DailyForecast[] }>(url).pipe(
+      map(response => response.list.filter((_, index) => index % 8 === 0)),
+      catchError(err => {
+        console.error('Ошибка при получении 5-дневного прогноза:', err);
+        return EMPTY;
+      })
+    );
   }
 }

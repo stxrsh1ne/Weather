@@ -1,4 +1,5 @@
-export interface WeatherResponse {
+export interface DailyForecast {
+  dt: number;
   main: {
     temp: number;
     humidity: number;
@@ -7,8 +8,4 @@ export interface WeatherResponse {
     icon: string;
     description: string;
   }[];
-  coord: {
-    lat: number;
-    lon: number;
-  };
 }

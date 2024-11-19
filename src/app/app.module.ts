@@ -1,29 +1,31 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { ForecastComponent } from './forecast/forecast.component';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {RouterLink, RouterOutlet} from '@angular/router';
-import {HttpClientModule} from '@angular/common/http';
+import {RouterModule} from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {WeatherComponent} from './weather/weather.component';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {AuthenticationInterceptor} from './auth/auth.interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
-    ForecastComponent
+    WeatherComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    RouterOutlet,
     HttpClientModule,
-    RouterLink,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    RouterModule
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true}],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+
+export class AppModule {
+}
