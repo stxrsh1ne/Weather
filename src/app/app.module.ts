@@ -8,12 +8,15 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {WeatherComponent} from './weather/weather.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AuthenticationInterceptor} from './auth/auth.interceptor';
+import {DateFormatPipe, TimeFormatPipe} from './date-format.pipe';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     WeatherComponent,
+    DateFormatPipe,
+    TimeFormatPipe
   ],
   imports: [
     BrowserModule,

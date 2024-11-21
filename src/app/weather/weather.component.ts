@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { HourlyWeather, WeatherResponse } from '../interface/forecast';
 import { WeatherService } from '../service/weather.service';
-import { WeatherResponse } from '../interface/forecast';
 
 @Component({
   selector: 'app-weather',
@@ -9,54 +8,49 @@ import { WeatherResponse } from '../interface/forecast';
   styleUrls: ['./weather.component.css']
 })
 export class WeatherComponent implements OnInit {
-  searchInput = new FormControl();
-  weather: string = '';
-  iconUrl: string = '';
-  dailyForecast: WeatherResponse[] = [];
-
+  weatherData?: WeatherResponse;
+  city: string = '';
+  filteredHours: HourlyWeather[] = [];
+  currentTime: number = Math.floor(Date.now() / 1000);
+  currentHourStart: number = Math.floor(Date.now() / 3600000) * 3600;
 
   constructor(private weatherService: WeatherService) {}
 
-  ngOnInit() {
-    const state = history.state;
-    if (state && state.visitedCities) {
-      console.log('Previously visited cities:', state.visitedCities);
+  ngOnInit(): void {
+    this.currentTime = Math.floor(Date.now() / 1000);
+  }
+
+  getWeather(): void {
+    if (this.city) {
+      this.weatherService.getWeatherForecast(this.city).subscribe(
+        (data: WeatherResponse) => {
+          this.weatherData = data;
+          this.currentTime = Math.floor(Date.now() / 1000);
+          this.filterHours();
+        },
+        (error) => {
+          console.error(error);
+        }
+      );
     }
   }
 
-  getWeather() {
-    const city = this.searchInput.value;
-    if (!city) {
-      this.weather = '';
-      this.iconUrl = '';
-      return;
+  filterHours(): void {
+    if (this.weatherData && this.weatherData.forecast && this.weatherData.forecast.forecastday.length > 0) {
+
+      const currentDate = new Date(this.currentTime * 1000);
+
+      const HourStart = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate()).getTime() / 1000;
+      const HoursLater = HourStart + (23 * 3600) + 3599;
+      const allHours = this.weatherData.forecast.forecastday.flatMap(day => day.hour);
+
+      this.filteredHours = allHours.filter(hour => {
+        return hour.time_epoch >= HourStart && hour.time_epoch <= HoursLater;
+      });
     }
-
-    const currentState = history.state;
-    const visitedCities = currentState.visitedCities || [];
-    visitedCities.push(city);
-    history.pushState({ visitedCities }, '', `?city=${city}`);
-
-    this.weatherService.getWeatherCurrently(city).subscribe(
-      (res: WeatherResponse) => {
-        this.weather =
-          `Current temperature is ${res.main.temp}°C, ` +
-          `humidity: ${res.main.humidity}%` + `wind: ${res.wind.speed}`;
-        this.iconUrl = `https://openweathermap.org/img/wn/${res.weather[0].icon}@2x.png`;
-
-        this.get5DayForecast(res.coord.lat, res.coord.lon);
-      },
-      err => console.log(`Can't get weather. Error: ${err.message}`)
-    );
   }
 
-  get5DayForecast(lat: number, lon: number) {
-    this.weatherService.get5DayForecast(lat, lon).subscribe(
-      (res: WeatherResponse[]) => {
-        this.dailyForecast = res;
-        console.log('5-Day Forecast:', this.dailyForecast);
-      },
-      err => console.log(`Can't get 5-day forecast. Error: ${err.message}`)
-    );
+  isCurrentHour(hour: HourlyWeather): boolean {
+    return hour.time_epoch >= this.currentHourStart && hour.time_epoch < this.currentHourStart + 3600;
   }
 }

@@ -1,28 +1,82 @@
-<div>
-  <input [formControl]="searchInput" placeholder="Введите город"/>
-  <button (click)="getWeather()">Получить погоду</button>
-</div>
+<div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4 text-center">
+      <input
+        type="text"
+        [(ngModel)]="city"
+        placeholder="Введите название города"
+        class="form-control mb-3"
+      />
+      <button class="btn btn-primary btn-block" (click)="getWeather()">Получить погоду</button>
+    </div>
+  </div>
 
-<div *ngIf="weather">
-  <p>{{ weather }}</p>
-  <img [src]="iconUrl" alt="Weather icon"/>
-</div>
+  <!-- Weather Card -->
+  <div *ngIf="weatherData" class="mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-4">
+        <div class="card weather-card text-center">
+          <div class="card-header">
+            <h3 class="card-title">{{ weatherData.location.name }}</h3>
+            <p class="card-subtitle mb-2 text-muted">{{ weatherData.current.last_updated_epoch | dateFormat }}</p>
+          </div>
+          <div class="card-body">
+            <div class="weather-icon">
+              <img
+                [src]="weatherData.current.condition.icon"
+                alt="Weather Icon"
+                class="weather-icon img-fluid mb-3"
+              />
+            </div>
+            <h2 class="display-4 font-weight-bold">{{ weatherData.current.temp_c }}°C</h2>
+            <p class="card-text">{{ weatherData.current.condition.text }}</p>
+          </div>
+          <div class="card-footer text-muted">
+            <div class="d-flex justify-content-between">
+              <p class="mb-0">Wind: {{ weatherData.current.wind_kph }} km/h</p>
+              <p class="mb-0">Pressure: {{ weatherData.current.pressure_mb }} mbar</p>
+            </div>
+            <div class="d-flex justify-content-between">
+              <p class="mb-0">Chance of rain: {{ weatherData.forecast.forecastday[0].day.daily_chance_of_rain }}%</p>
+              <p class="mb-0">Humidity: {{ weatherData.current.humidity }}%</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<div *ngIf="dailyForecast.length">
-  <h3>5-дневный прогноз:</h3>
-  <ul>
-    <li *ngFor="let day of dailyForecast">
-      <p>
-        {{ day.dt * 1000 | date:'EEE' }}:
-        {{ day.main.temp }}°C,
-        Влажность: {{ day.main.humidity }}%,
-        Давление: {{ day.main.pressure }},
-        Погода: {{ day.weather[0].description }},
-        Вероятность дождя: {{ day.pop * 100 + '%' }},
-        Ветер: {{ day.wind.speed }} м/с
-      </p>
-      <img [src]="'https://openweathermap.org/img/wn/' + day.weather[0].icon + '@2x.png'" alt="Weather icon"/>
-    </li>
-  </ul>
-</div>
+    <div class="d-flex flex-row flex-wrap justify-content-center mt-3">
+      <div class="card hourly-card text-center mx-2" *ngFor="let hour of filteredHours">
+        <div class="card-header">
+          <h5>{{ isCurrentHour(hour) ? 'now' : (hour.time_epoch | timeFormat) }}</h5>
+        </div>
+        <div class="card-body">
+          <img
+            [src]="hour.condition.icon"
+            alt="{{ hour.condition.text }}"
+            class="img-fluid mb-2"
+          />
+          <p>Min: {{ weatherData.forecast.forecastday[0].day.mintemp_c }} °C</p>
+          <p>Max: {{ weatherData.forecast.forecastday[0].day.maxtemp_c }} °C</p>
+          <p>Rain: {{ hour.chance_of_rain }}%</p>
+          <p>{{ hour.condition.text }}</p>
+        </div>
+      </div>
+    </div>
 
+    <div class="d-flex flex-row flex-wrap justify-content-center mt-3">
+      <div class="card daily-card text-center mx-2" *ngFor="let day of weatherData.forecast.forecastday">
+        <div class="card-header">
+          <h4>{{ day.date_epoch | dateFormat | slice:0:3 }}</h4>
+        </div>
+        <div class="card-body">
+          <img [src]="day.day.condition.icon" alt="{{ day.day.condition.text }}" class="img-fluid mb-2"/>
+          <p>Rain: {{ day.day.daily_chance_of_rain }}%</p>
+          <p>{{ day.day.condition.text }}</p>
+          <p>Max: {{ day.day.maxtemp_c }}°C</p>
+          <p>Min: {{ day.day.mintemp_c }}°C</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
