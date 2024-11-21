@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {Observable, EMPTY} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
 import {WeatherResponse} from '../interface/forecast';
-import {DailyForecast} from '../interface/daily-forecast';
 
 @Injectable({
   providedIn: 'root'
@@ -27,9 +26,9 @@ export class WeatherService {
       }));
   }
 
-  get5DayForecast(lat: number, lon: number): Observable<DailyForecast[]> {
+  get5DayForecast(lat: number, lon: number): Observable<WeatherResponse[]> {
     const url = `${this.baseWeatherURL}forecast?lat=${lat}&lon=${lon}${this.urlSuffix}`;
-    return this.http.get<{ list: DailyForecast[] }>(url).pipe(
+    return this.http.get<{ list: WeatherResponse[] }>(url).pipe(
       map(response => response.list.filter((_, index) => index % 8 === 0)),
       catchError(err => {
         console.error('Ошибка при получении 5-дневного прогноза:', err);

@@ -6,7 +6,7 @@ import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest} from '@angular/com
 export class AuthenticationInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const newReq = req.clone({
-      url: req.url.concat('&appid=a46177408fc7fee00cf7abe9b1093cea')
+      url: req.url.concat('&key=8dc95f1a9526424bb2a223711241811')
     });
     return next.handle(newReq);
   }

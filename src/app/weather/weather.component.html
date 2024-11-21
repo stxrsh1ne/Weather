@@ -1,23 +1,28 @@
 <div>
-  <input [formControl]="searchInput" placeholder="Введите город" />
+  <input [formControl]="searchInput" placeholder="Введите город"/>
   <button (click)="getWeather()">Получить погоду</button>
 </div>
 
 <div *ngIf="weather">
   <p>{{ weather }}</p>
-  <img [src]="iconUrl" alt="Weather icon" />
+  <img [src]="iconUrl" alt="Weather icon"/>
 </div>
 
 <div *ngIf="dailyForecast.length">
   <h3>5-дневный прогноз:</h3>
   <ul>
     <li *ngFor="let day of dailyForecast">
-      <p>{{ day.dt * 1000 | date:'fullDate' }}:
+      <p>
+        {{ day.dt * 1000 | date:'EEE' }}:
         {{ day.main.temp }}°C,
         Влажность: {{ day.main.humidity }}%,
-        Погода: {{ day.weather[0].description }}
+        Давление: {{ day.main.pressure }},
+        Погода: {{ day.weather[0].description }},
+        Вероятность дождя: {{ day.pop * 100 + '%' }},
+        Ветер: {{ day.wind.speed }} м/с
       </p>
-      <img [src]="'https://openweathermap.org/img/wn/' + day.weather[0].icon + '@2x.png'" alt="Weather icon" />
+      <img [src]="'https://openweathermap.org/img/wn/' + day.weather[0].icon + '@2x.png'" alt="Weather icon"/>
     </li>
   </ul>
 </div>
+
