@@ -119,3 +119,7 @@ export interface WeatherResponse {
     forecastday: ForecastDay[];
   };
 }
+export interface CityWeather {
+  name: string;
+  weather: WeatherResponse;
+}

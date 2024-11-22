@@ -1,17 +1,4 @@
 <div class="container my-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6 col-lg-4 text-center">
-      <input
-        type="text"
-        [(ngModel)]="city"
-        placeholder="Введите название города"
-        class="form-control mb-3"
-      />
-      <button class="btn btn-primary btn-block" (click)="getWeather()">Получить погоду</button>
-    </div>
-  </div>
-
-  <!-- Weather Card -->
   <div *ngIf="weatherData" class="mt-5">
     <div class="row justify-content-center">
       <div class="col-md-6 col-lg-4">
@@ -22,11 +9,7 @@
           </div>
           <div class="card-body">
             <div class="weather-icon">
-              <img
-                [src]="weatherData.current.condition.icon"
-                alt="Weather Icon"
-                class="weather-icon img-fluid mb-3"
-              />
+              <img [src]="weatherData.current.condition.icon" alt="Weather Icon" class="weather-icon img-fluid mb-3" />
             </div>
             <h2 class="display-4 font-weight-bold">{{ weatherData.current.temp_c }}°C</h2>
             <p class="card-text">{{ weatherData.current.condition.text }}</p>
@@ -45,17 +28,15 @@
       </div>
     </div>
 
+    <button class="btn btn-primary btn-block" (click)="getCitiesList()">Получить погоду</button>
+
     <div class="d-flex flex-row flex-wrap justify-content-center mt-3">
       <div class="card hourly-card text-center mx-2" *ngFor="let hour of filteredHours">
         <div class="card-header">
           <h5>{{ isCurrentHour(hour) ? 'now' : (hour.time_epoch | timeFormat) }}</h5>
         </div>
         <div class="card-body">
-          <img
-            [src]="hour.condition.icon"
-            alt="{{ hour.condition.text }}"
-            class="img-fluid mb-2"
-          />
+          <img [src]="hour.condition.icon" alt="{{ hour.condition.text }}" class="img-fluid mb-2" />
           <p>Min: {{ weatherData.forecast.forecastday[0].day.mintemp_c }} °C</p>
           <p>Max: {{ weatherData.forecast.forecastday[0].day.maxtemp_c }} °C</p>
           <p>Rain: {{ hour.chance_of_rain }}%</p>
@@ -70,7 +51,7 @@
           <h4>{{ day.date_epoch | dateFormat | slice:0:3 }}</h4>
         </div>
         <div class="card-body">
-          <img [src]="day.day.condition.icon" alt="{{ day.day.condition.text }}" class="img-fluid mb-2"/>
+          <img [src]="day.day.condition.icon" alt="{{ day.day.condition.text }}" class="img-fluid mb-2" />
           <p>Rain: {{ day.day.daily_chance_of_rain }}%</p>
           <p>{{ day.day.condition.text }}</p>
           <p>Max: {{ day.day.maxtemp_c }}°C</p>
