@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
   name: 'dateFormat'
@@ -15,6 +15,7 @@ export class DateFormatPipe implements PipeTransform {
     return date.toLocaleDateString('en-US', options);
   }
 }
+
 @Pipe({
   name: 'timeFormat'
 })
@@ -22,7 +23,7 @@ export class TimeFormatPipe implements PipeTransform {
   transform(value: number): string {
     if (!value) return '';
     const date = new Date(value * 1000);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
   }
 }
 

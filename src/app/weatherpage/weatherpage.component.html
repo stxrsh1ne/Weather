@@ -6,13 +6,19 @@
     placeholder="Введите название города"
     class="form-control mb-3"
   />
-  <button class="btn btn-primary btn-block" (click)="getWeather()">Получить погоду</button>
-  <a class="link" (click)="goBack()">Назад →</a>
+  <button class="btn btn-primary btn-block" (click)="getWeather(inputCity)">Получить погоду</button>
+
   <div *ngIf="cityWeatherList.length > 0">
     <div class="city-card" *ngFor="let city of cityWeatherList" (click)="getWeatherForCity(city)">
       <h3>{{ city.name }}</h3>
-      <p>{{ city.weather.current.temp_c }}°C</p>
+      <p>Min: {{ getTemperatureMin(city.weather) }}</p>
+      <p>Max: {{ getTemperatureMax(city.weather) }}</p>
+      <img [src]="city.weather.current.condition.icon" alt="Weather Icon" class="weather-icon img-fluid mb-3"/>
       <p>{{ city.weather.current.condition.text }}</p>
     </div>
   </div>
+
+  <a class="link" (click)="goBack()">Назад →</a>
 </div>
+
+<button (click)="clearLocalStorage()">Очистить историю поиска</button>

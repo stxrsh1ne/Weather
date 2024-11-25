@@ -5,20 +5,17 @@ import {AppComponent} from './app.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {WeatherComponent} from './weather/weather.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AuthenticationInterceptor} from './auth/auth.interceptor';
-import {DateFormatPipe, TimeFormatPipe} from './date-format.pipe';
-import {weatherPageComponent} from './weatherpage/weatherpage.component';
+import {WeatherPageComponent} from './weatherpage/weatherpage.component';
+import {SettingsComponent} from './settings/settings.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    WeatherComponent,
-    DateFormatPipe,
-    TimeFormatPipe,
-    weatherPageComponent,
+    WeatherPageComponent,
+    SettingsComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,7 +26,13 @@ import {weatherPageComponent} from './weatherpage/weatherpage.component';
     BrowserAnimationsModule,
     RouterModule
   ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true}],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthenticationInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 

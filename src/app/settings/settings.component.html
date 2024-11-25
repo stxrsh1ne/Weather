@@ -1,0 +1,28 @@
+<h2>Unit</h2>
+
+<div>
+  <label for="temperatureUnit">Temperature unt</label>
+  <select id="temperatureUnit" [(ngModel)]="temperatureUnit" class="form-control">
+    <option value="C">°C</option>
+    <option value="F">°F</option>
+  </select>
+</div>
+
+<div>
+  <label for="windSpeedUnit">Wind speed unit</label>
+  <select id="windSpeedUnit" [(ngModel)]="windSpeedUnit" class="form-control">
+    <option value="kph">kp/h</option>
+    <option value="mph">mp/h</option>
+  </select>
+</div>
+
+<div>
+  <label for="pressureUnit">Atmospheric pressure unit</label>
+  <select id="pressureUnit" [(ngModel)]="pressureUnit" class="form-control">
+    <option value="mb">mbar</option>
+    <option value="in">in</option>
+  </select>
+</div>
+
+
+<button class="btn btn-primary" (click)="saveSettings()">Settings</button>
