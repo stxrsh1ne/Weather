@@ -1,24 +1,28 @@
-<h1>Погода</h1>
-<div class="city-list">
-  <input
-    type="text"
-    [(ngModel)]="inputCity"
-    placeholder="Введите название города"
-    class="form-control mb-3"
-  />
-  <button class="btn btn-primary btn-block" (click)="getWeather(inputCity)">Получить погоду</button>
-
-  <div *ngIf="cityWeatherList.length > 0">
-    <div class="city-card" *ngFor="let city of cityWeatherList" (click)="getWeatherForCity(city)">
-      <h3>{{ city.name }}</h3>
-      <p>Min: {{ getTemperatureMin(city.weather) }}</p>
-      <p>Max: {{ getTemperatureMax(city.weather) }}</p>
-      <img [src]="city.weather.current.condition.icon" alt="Weather Icon" class="weather-icon img-fluid mb-3"/>
-      <p>{{ city.weather.current.condition.text }}</p>
+<main>
+  <div class="container">
+    <div class="city-list">
+      <div class="input-container">
+        <img src="assets/images/search.svg" alt="search" class="search-icon"/>
+        <input
+          type="text"
+          [(ngModel)]="inputCity"
+          placeholder="Search Your City"
+          class="form-control mb-3 search-input"
+          (keydown.enter)="getWeather(inputCity)"
+        />
+      </div>
+      <div *ngIf="cityWeatherList.length > 0">
+        <div class="city-card" *ngFor="let city of cityWeatherList" (click)="getWeatherForCity(city)">
+          <div class="city-info">
+            <p>{{ city.name }}</p>
+            <p>{{ getTemperatureMinDay(city.weather) }}/{{ getTemperatureMaxDay(city.weather) }}</p>
+          </div>
+          <div class="weather-details">
+            <img [src]="city.weather.current.condition.icon" alt="Weather Icon" class="weather-icon img-fluid"/>
+            <p class="weather-condition">{{ city.weather.current.condition.text }}</p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-
-  <a class="link" (click)="goBack()">Назад →</a>
-</div>
-
-<button (click)="clearLocalStorage()">Очистить историю поиска</button>
+</main>

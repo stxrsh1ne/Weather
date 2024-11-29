@@ -23,7 +23,8 @@ export class WeatherComponent implements OnInit {
               private route: ActivatedRoute,
               private router: Router,
               private settingsService: SettingsService,
-              private weatherFormatter: WeatherFormatterService) {}
+              private weatherFormatter: WeatherFormatterService) {
+  }
 
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
@@ -69,11 +70,11 @@ export class WeatherComponent implements OnInit {
   }
 
   getTemperatureMinHour(weather: WeatherResponse): string {
-    return this.weatherFormatter.getTemperatureMinHour(weather, this.temperatureUnit);
+    return this.weatherFormatter.getTemperatureMin(weather, this.temperatureUnit);
   }
 
   getTemperatureMaxHour(weather: WeatherResponse): string {
-    return this.weatherFormatter.getTemperatureMaxHour(weather, this.temperatureUnit);
+    return this.weatherFormatter.getTemperatureMax(weather, this.temperatureUnit);
   }
 
   getTemperatureMinDay(day: ForecastDay): string {
@@ -96,12 +97,13 @@ export class WeatherComponent implements OnInit {
     return this.weatherFormatter.getPressure(current, this.pressureUnit);
   }
 
-
-  getCitiesList(): void {
-    this.router.navigate(['/cities']);
+  scrollLeft() {
+    const slider = document.querySelector('.slider') as HTMLElement;
+    slider.scrollBy({left: -150, behavior: 'smooth'});
   }
 
-  getSettings(): void {
-    this.router.navigate(['/settings']);
+  scrollRight() {
+    const slider = document.querySelector('.slider') as HTMLElement;
+    slider.scrollBy({left: 150, behavior: 'smooth'});
   }
 }

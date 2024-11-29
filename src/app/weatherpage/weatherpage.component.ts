@@ -3,11 +3,12 @@ import {Router} from '@angular/router';
 import {WeatherService} from '../service/weather.service';
 import {CityWeather, WeatherResponse} from '../interface/forecast';
 import {SettingsService} from '../service/settings.service';
+import {WeatherFormatterService} from '../service/weather-settings.service';
 
 @Component({
   selector: 'app-weatherPage',
-  templateUrl: './weatherPage.component.html',
-  styleUrls: ['./weatherPage.component.css']
+  templateUrl: './weatherpage.component.html',
+  styleUrls: ['./weatherpage.component.css']
 })
 export class WeatherPageComponent implements OnInit {
   cityWeatherList: CityWeather[] = [];
@@ -17,7 +18,9 @@ export class WeatherPageComponent implements OnInit {
 
   constructor(private weatherService: WeatherService,
               private router: Router,
-              private settingsService: SettingsService) {}
+              private settingsService: SettingsService,
+              private weatherFormatter: WeatherFormatterService) {
+  }
 
   ngOnInit(): void {
     this.loadSavedCities();
@@ -56,6 +59,7 @@ export class WeatherPageComponent implements OnInit {
           console.error(error);
         }
       );
+      this.inputCity = '';
     }
   }
 
@@ -72,25 +76,12 @@ export class WeatherPageComponent implements OnInit {
     this.router.navigate(['/weather'], {queryParams: {city: city.name}});
   }
 
-  goBack(): void {
-    this.router.navigate(['/weather']);
+  getTemperatureMinDay(weather: WeatherResponse): string {
+    return this.weatherFormatter.getTemperatureMin(weather, this.temperatureUnit);
   }
 
-  getTemperatureMin(weather: WeatherResponse): string {
-    return this.temperatureUnit === 'C'
-      ? `${weather.forecast.forecastday[0].day.mintemp_c} °C`
-      : `${weather.forecast.forecastday[0].day.mintemp_f} °F`;
+  getTemperatureMaxDay(weather: WeatherResponse): string {
+    return this.weatherFormatter.getTemperatureMax(weather, this.temperatureUnit);
   }
 
-  getTemperatureMax(weather: WeatherResponse): string {
-    return this.temperatureUnit === 'C'
-      ? `${weather.forecast.forecastday[0].day.maxtemp_c} °C`
-      : `${weather.forecast.forecastday[0].day.maxtemp_f} °F`;
-  }
-
-  clearLocalStorage(): void {
-    localStorage.removeItem('searchedCities');
-    localStorage.removeItem('lastSelectedCity');
-    this.cityWeatherList = [];
-  }
 }

@@ -17,15 +17,14 @@ export class SettingsComponent {
     this.temperatureUnit = settings.temperatureUnit;
     this.pressureUnit = settings.pressureUnit;
     this.windSpeedUnit = settings.windSpeedUnit;
-
   }
 
-  saveSettings() {
+  updateSettings() {
     this.settingsService.updateSettings({
       temperatureUnit: this.temperatureUnit,
       pressureUnit: this.pressureUnit,
       windSpeedUnit: this.windSpeedUnit
     });
-    this.router.navigate(['/weather']);
   }
+
 }

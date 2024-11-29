@@ -7,13 +7,13 @@ import { WeatherResponse, CurrentWeather, ForecastDay } from '../interface/forec
 export class WeatherFormatterService {
   constructor() {}
 
-  getTemperatureMinHour(weather: WeatherResponse, temperatureUnit: string): string {
+  getTemperatureMin(weather: WeatherResponse, temperatureUnit: string): string {
     return temperatureUnit === 'C'
       ? `${weather.forecast.forecastday[0].day.mintemp_c} °C`
       : `${weather.forecast.forecastday[0].day.mintemp_f} °F`;
   }
 
-  getTemperatureMaxHour(weather: WeatherResponse, temperatureUnit: string): string {
+  getTemperatureMax(weather: WeatherResponse, temperatureUnit: string): string {
     return temperatureUnit === 'C'
       ? `${weather.forecast.forecastday[0].day.maxtemp_c} °C`
       : `${weather.forecast.forecastday[0].day.maxtemp_f} °F`;
