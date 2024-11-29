@@ -1,7 +1,5 @@
 import {Component} from '@angular/core';
 import {SettingsService} from '../service/settings.service';
-import {Router} from "@angular/router";
-
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.component.html',
@@ -12,7 +10,7 @@ export class SettingsComponent {
   pressureUnit: string;
   windSpeedUnit: string;
 
-  constructor(private settingsService: SettingsService, private router: Router) {
+  constructor(private settingsService: SettingsService) {
     const settings = this.settingsService.getSettings();
     this.temperatureUnit = settings.temperatureUnit;
     this.pressureUnit = settings.pressureUnit;
@@ -26,5 +24,4 @@ export class SettingsComponent {
       windSpeedUnit: this.windSpeedUnit
     });
   }
-
 }
